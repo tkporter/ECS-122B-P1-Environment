@@ -1,0 +1,139 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{hyperref}
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+\newtheorem*{solution}{Solution}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Dept. of Computer Science, University of California, Davis\\ECS122b \hspace{.5in} Instructor: Rob Gysel \hspace{.5in} 1/27/18} % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Programming Assignment \#1\footnote{Last updated \today}\\Due date: 2/5/18 11:59pm \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{} % Put your name here
+
+\date{}
+
+\begin{document}
+\maketitle % Print the title
+\vspace{-3cm}
+
+Programs are to be submitted using \texttt{handin} by the due date; be sure your code compiles and works on the CSIF. If you are unfamiliar with \texttt{handin} or the CSIF, see \url{http://csifdocs.cs.ucdavis.edu/}. Use the command:
+
+\begin{verbatim}
+	handin rsgysel 122b-Program1 file1 file2 ... fileN
+\end{verbatim}
+
+You may work in groups of up to 2 people.
+Programs submitted up to 24 hours late will still be accepted but incur a 10\% grade penalty.
+
+\subsection*{Overview}
+In this project, you will:
+\begin{enumerate}
+	\item Write basic unit tests.
+	\item Add basic building instructions to \texttt{CMakeLists.txt} for \texttt{CMake}.
+	\item Write sanity checks.
+	\item Implement two exact matching algorithms: Z-algorithm based matching and Boyer-Moore.
+\end{enumerate}
+
+Set up your development environment using the notes found in \texttt{Project1EnvironmentSetup.pdf}.
+Carefully follow part 3, "Setting up developing environment", which contains a step-by-step list of how to get your environment up and running.\\
+
+You do not need to create any files from scratch for this project.
+Your programming will consist of writing tests and implementing the body of pre-defined functions.
+\textbf{Warning: to match the notation of the text, pattern strings, text strings, etc. are defined to start with index 1 (1-indexed).
+To simplify this, use the following convention: to represent a string "mystring", use \texttt{std::string S = " mystring"} (note the leading space).
+Strings representing alphabets (e.g. $\Sigma$) are 0-indexed as normal.}
+
+Throughout this project, when you compile, do the following steps in your project's root directory\footnote{The root directory will have all of your .cpp, .h files etc.}.
+In the following commands, I assume you are starting in the root directory.
+\begin{enumerate}
+	\item Create a directory called \texttt{build} using \texttt{mkdir}, or change directory to \texttt{build} and delete its contents with \texttt{rm -r *}.
+	\item Run CMake in \texttt{build} with \texttt{CMake ..}
+	\item Run Make in \texttt{build} with \texttt{make} (any unit tests you have defined will execute during this stage.)
+\end{enumerate}
+
+\subsection*{References}
+The following are helpful references for this project.
+\begin{description}
+	\item[C++ Standard Library] \url{http://www.cplusplus.com/reference/} (has tutorials) and \url{http://en.cppreference.com/w/} (terse)
+	\item[Google Test Documentation] \url{http://cheezyworld.com/wp-content/uploads/2010/12/PlainGoogleQuickTestReferenceGuide1.pdf}, especially page 3, which defines \texttt{EXPECT\_*} and \texttt{ASSERT\_*} macros that you must use for all of your tests.
+	\item[CMake Documentation] You should not need to deep-dive into CMake. Instead, you should be able to copy and paste CMake code and make the appropriate changes where necessary (e.g. change which source files are used, target names, etc.). However, if you feel that you need a reference, refer to \url{https://cmake.org/documentation/}.
+\end{description}
+
+\subsection*{Part1: Z-algorithm Exact Matching}
+\begin{description}
+	\item[Learning objectives:] Understand and implement Z-algorithm exact matching as described in the text. Learn how to write unit tests and how unit tests inform your development process while you code.
+	\item[Files to modify:] \texttt{Zalgorithm.cpp}, \texttt{ZalgorithmTests.cpp}
+	\item[Instructions:] Complete the following steps, \textit{in this order}.
+		\begin{enumerate}
+			\item Write missing code from \texttt{Zalgorithm.cpp} and check its results manually using small examples (keep your text at most 10 characters and pattern at most 3 characters). Be sure to address all \texttt{TODO}'s.
+			\item Write all of the unit tests in \texttt{ZalgorithmTests.cpp}. You must use either \texttt{EXPECT\_*} or \texttt{ASSERT\_*} for your tests. Use \texttt{EXPECT\_*} for most of your tests, and use \texttt{ASSERT\_*} if a failed test results in a segmentation fault (e.g. testing the size of a container). Make sure all your unit tests pass when you use \texttt{make} in the \texttt{build} directory.
+			\item Run the sanity check \texttt{ZalgorithmSanityCheck}. If you see errors, you may need to debug code from the previous steps (in the \texttt{Zalgorithm.cpp}).
+		\end{enumerate}
+\end{description}
+
+\subsection*{Part2: Boyer-Moore Preprocessing}
+\begin{description}
+	\item[Learning objectives:] Boyer-Moore is another linear time string matching algorithm that we did not study in the class. It has been implemented for you. Your goals are to learn how to build libraries, executables, and sanity check code that you are not necessarily familiar with. The sanity check test your program in a more thorough manner than a set of unit tests.
+	\item[Files to modify:] \texttt{CMakeLists.txt},
+		\texttt{BoyerMooreSanityCheck.cpp}
+	\item[Instructions:] Complete the following steps, \textit{in this order}.
+		\begin{enumerate}
+			\item Add \texttt{BoyerMooreSanityCheck} by modifying \texttt{CMakeLists.txt}. You should copy, paste, and slightly modify the current code in \texttt{CMakeLists.txt} to achieve this.
+			\item Implement \texttt{BoyerMooreSanityCheck.cpp}. See \texttt{ZalgorithmSanityCheck.cpp} and follow its example as you implement this program.
+			\item Add unit tests contained in \texttt{BoyerMoorePreprocessingTests.cpp} to the project by modifying \texttt{CMakeLists.txt}. You should copy, paste, and slightly modify the current code in \texttt{CMakeLists.txt} to achieve this.
+			\item Notice that when you build with \texttt{make}, the unit tests run and pass (are \textit{green}). Experiment: comment out parts of \texttt{BoyerMoorePreprocessing.cpp} to purposefully introduce bugs into the code (you don't need to know \textit{what} bugs they are, just break it), then build again and see the tests run and fail (are \textit{red}). Once you are done, revert \texttt{BoyerMoorePreprocessing.cpp} back to its previous working condition.
+		\end{enumerate}
+\end{description}
+
+\subsection*{Part3: Exact Matching}
+\begin{description}
+	\item[Learning objectives:] Learn how to sanity check your results using two algorithms to verify results.
+	\item[Files to modify:] \texttt{TwoAlgorithmVerificationSanityCheck.cpp}, \texttt{CMakeLists.txt}
+	\item[Instructions:] Complete the following steps, \textit{in this order}.
+		\begin{enumerate}
+			\item Add unit \texttt{TwoAlgorithmVerificationSanityCheck} to your project by modifying \texttt{CMakeLists.txt}. You should copy, paste, and slightly modify the current code in \texttt{CMakeLists.txt} to achieve this.	
+			\item Write the sanity check in \texttt{TwoAlgorithmVerificationSanityCheck.cpp}. Once complete, build it, then run \texttt{TwoAlgorithmVerificationSanityCheck} in the \texttt{build} directory. If you see errors, you may need to debug your code from Part 1 and/or from \texttt{TwoAlgorithmVerificationSanityCheck.cpp}.		\end{enumerate}
+\end{description}
+
+
+
+\end{document}
